@@ -4,6 +4,8 @@ This document defines a high level roadmap for go-zero development and upcoming 
 Community and contributor involvement is vital for successfully implementing all desired items for each release.
 We hope that the items listed below will inspire further engagement from the community to keep go-zero progressing and shipping exciting and valuable features.
 
+
+
 ## 2021 Q2
 - [x] Support service discovery through K8S client api
 - [x] Log full sql statements for easier sql problem solving
