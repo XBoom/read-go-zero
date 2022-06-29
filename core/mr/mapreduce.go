@@ -99,7 +99,7 @@ func FinishVoid(fns ...func()) {
 
 // ForEach maps all elements from given generate but no output.
 func ForEach(generate GenerateFunc, mapper ForEachFunc, opts ...Option) {
-	options := buildOptions(opts...)
+	options := buildOptions(opts...)	//可选项构建
 	panicChan := &onceChan{channel: make(chan interface{})}
 	source := buildSource(generate, panicChan)
 	collector := make(chan interface{})
@@ -238,6 +238,7 @@ func MapReduceVoid(generate GenerateFunc, mapper MapperFunc, reducer VoidReducer
 }
 
 // WithContext customizes a mapreduce processing accepts a given ctx.
+// WithContext 定义一个 mapreduce对象 的上下文ctx变量
 func WithContext(ctx context.Context) Option {
 	return func(opts *mapReduceOptions) {
 		opts.ctx = ctx
@@ -245,6 +246,7 @@ func WithContext(ctx context.Context) Option {
 }
 
 // WithWorkers customizes a mapreduce processing with given workers.
+//WithWorkers 定义一个 mapreduct 有几个协程执行
 func WithWorkers(workers int) Option {
 	return func(opts *mapReduceOptions) {
 		if workers < minWorkers {
@@ -255,6 +257,7 @@ func WithWorkers(workers int) Option {
 	}
 }
 
+//buildOptions 利用入参 Option 对 mapReduce对象 进行过操作并返回这个对象的指针
 func buildOptions(opts ...Option) *mapReduceOptions {
 	options := newOptions()
 	for _, opt := range opts {
@@ -264,6 +267,7 @@ func buildOptions(opts ...Option) *mapReduceOptions {
 	return options
 }
 
+//buildSource 使用协程执行generate 并将协程的参数一个非缓冲的channel返回。如果generate发生panic，则将错误写入 onceChan
 func buildSource(generate GenerateFunc, panicChan *onceChan) chan interface{} {
 	source := make(chan interface{})
 	go func() {
@@ -281,6 +285,7 @@ func buildSource(generate GenerateFunc, panicChan *onceChan) chan interface{} {
 }
 
 // drain drains the channel.
+// drain 丢弃channel内容
 func drain(channel <-chan interface{}) {
 	// drain the channel
 	for range channel {
@@ -328,6 +333,7 @@ func executeMappers(mCtx mapperContext) {
 	}
 }
 
+//newOptions 返回一个 *mapReduceOptions 新对象指针
 func newOptions() *mapReduceOptions {
 	return &mapReduceOptions{
 		ctx:     context.Background(),
@@ -335,6 +341,7 @@ func newOptions() *mapReduceOptions {
 	}
 }
 
+//once 仅执行一次 fn
 func once(fn func(error)) func(error) {
 	once := new(sync.Once)
 	return func(err error) {
