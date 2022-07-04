@@ -10,24 +10,24 @@ import (
 
 type (
 	// Starter is the interface wraps the Start method.
-	Starter interface {
+	Starter interface { 	//开启接口 Starter
 		Start()
 	}
 
 	// Stopper is the interface wraps the Stop method.
-	Stopper interface {
+	Stopper interface {    //停止接口 Stopper
 		Stop()
 	}
 
 	// Service is the interface that groups Start and Stop methods.
-	Service interface {
+	Service interface {   //服务管理对象 Service
 		Starter
 		Stopper
 	}
 
 	// A ServiceGroup is a group of services.
 	// Attention: the starting order of the added services is not guaranteed.
-	ServiceGroup struct {
+	ServiceGroup struct {   //服务组：无法保证服务启动顺序
 		services []Service
 		stopOnce func()
 	}
@@ -59,7 +59,7 @@ func (sg *ServiceGroup) Start() {
 }
 
 // Stop stops the ServiceGroup.
-func (sg *ServiceGroup) Stop() {
+func (sg *ServiceGroup) Stop() {NewCache
 	sg.stopOnce()
 }
 
