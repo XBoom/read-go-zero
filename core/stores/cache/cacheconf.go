@@ -1,4 +1,4 @@
 package cache
 
-// CacheConf is an alias of ClusterConf.
-type CacheConf = ClusterConf
+type CacheConf = ClusterConf// CacheConf is an alias of ClusterConf.
+

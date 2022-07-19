@@ -146,7 +146,7 @@ func (c *Cache) Take(key string, fetch func() (interface{}, error)) (interface{}
 	if err != nil {
 		return nil, err
 	}
-
+	core/syncx/singleflight.go
 	if fresh {
 		c.stats.IncrementMiss()
 		return val, nil
