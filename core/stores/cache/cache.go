@@ -13,41 +13,38 @@ import (
 )
 
 type (
-	// Cache interface is used to define the cache implementation.
+	// Cache interface 定义缓存接口
 	Cache interface {
-		// Del deletes cached values with keys.
+		// Del 根据Keys删除(支持批量删除)
 		Del(keys ...string) error
-		// DelCtx deletes cached values with keys.
+		// DelCtx 根据Keys删除(支持批量删除 ctx)
 		DelCtx(ctx context.Context, keys ...string) error
-		// Get gets the cache with key and fills into v.
+		// Get 根据 Key 获取缓存存入 val
 		Get(key string, val interface{}) error
-		// GetCtx gets the cache with key and fills into v.
+		// GetCtx 根据 Key 获取缓存存入 val
 		GetCtx(ctx context.Context, key string, val interface{}) error
-		// IsNotFound checks if the given error is the defined errNotFound.
+		// IsNotFound 判断是否是缓存没有找到的错误 errNotFound.
 		IsNotFound(err error) bool
-		// Set sets the cache with key and v, using c.expiry.
+		// Set 设置缓存 k/v
 		Set(key string, val interface{}) error
-		// SetCtx sets the cache with key and v, using c.expiry.
+		// SetCtx 设置缓存 k/v
 		SetCtx(ctx context.Context, key string, val interface{}) error
-		// SetWithExpire sets the cache with key and v, using given expire.
+		// SetWithExpire 设置缓存 k/v,带过期时间
 		SetWithExpire(key string, val interface{}, expire time.Duration) error
-		// SetWithExpireCtx sets the cache with key and v, using given expire.
+		// SetWithExpireCtx 设置缓存 k/v,带过期时间
 		SetWithExpireCtx(ctx context.Context, key string, val interface{}, expire time.Duration) error
-		// Take takes the result from cache first, if not found,
-		// query from DB and set cache using c.expiry, then return the result.
+		// Take 首先从缓存获取，如果缓存没有则从数据库加载并设置缓存
 		Take(val interface{}, key string, query func(val interface{}) error) error
-		// TakeCtx takes the result from cache first, if not found,
-		// query from DB and set cache using c.expiry, then return the result.
+		// TakeCtx 首先从缓存获取，如果缓存没有则从数据库加载并设置缓存
 		TakeCtx(ctx context.Context, val interface{}, key string, query func(val interface{}) error) error
-		// TakeWithExpire takes the result from cache first, if not found,
-		// query from DB and set cache using given expire, then return the result.
+		// TakeWithExpire 首先从缓存获取，如果缓存没有则从数据库加载并设置缓存,缓存过期时间为 expire
 		TakeWithExpire(val interface{}, key string, query func(val interface{}, expire time.Duration) error) error
-		// TakeWithExpireCtx takes the result from cache first, if not found,
-		// query from DB and set cache using given expire, then return the result.
+		// TakeWithExpireCtx 首先从缓存获取，如果缓存没有则从数据库加载并设置缓存,缓存过期时间为 expire
 		TakeWithExpireCtx(ctx context.Context, val interface{}, key string,
 			query func(val interface{}, expire time.Duration) error) error
 	}
 
+	//缓存集群
 	cacheCluster struct {
 		dispatcher  *hash.ConsistentHash
 		errNotFound error
